@@ -1,0 +1,69 @@
+namespace :chatops do
+  desc "Notify ChatOps Started"
+  task :notify_started do
+    # return
+    set :chatops_time_started, Time.now
+    run_locally do
+      if fetch(:chatops_notify_events).include? :started
+        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:starting))
+      end
+    end
+  end
+  before 'deploy:starting', 'chatops:notify_started'
+  # before 'rbenv:validate', 'chatops:notify_started'
+
+  desc "Notify ChatOps Finished"
+  task :notify_finished do
+    set :chatops_time_finished, Time.now
+    run_locally do
+      if fetch(:chatops_notify_events).include? :finished
+        info 'Notifying ChatOps of deploy finished'
+        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:success))
+      end
+    end
+  end
+  # after 'deploy:finished', 'chatops:notify_finished'
+  # before 'deploy:failed', 'chatops:notify_finished'
+
+  desc "Notify ChatOps Finished"
+  task :notify_failed do
+    set :chatops_time_finished, Time.now
+    run_locally do
+      if fetch(:chatops_notify_events).include? :failed
+        info 'Notifying ChatOps of deploy failed'
+        # Chatopsify::Co.new.call(Chatopsify::CoLib.message_body(:failed))
+        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:failed))
+      end
+    end
+  end
+  # before 'deploy:failed', 'chatops:notify_failed'
+end
+
+namespace :load do
+  task :defaults do
+    set :chatops_co_uri, nil
+    set :chatops_api_key, nil
+    set :chatops_channel_id, nil
+
+    set :local_user, ->{ ENV["USER"] || ENV["LOGNAME"] || ENV["USERNAME"] || `hostname`.strip + '•' + `whoami`.strip || "default_user" }
+    set :ip_address, ->{
+      servers = release_roles(:all)
+      servers = servers.select{ |e| ENV['HOSTS']&.include?(e.hostname) } if ENV['HOSTS']
+      servers.map{ |e| ["#{e.hostname} (#{e.properties.fetch(:my_property)&.upcase!})"]}.join(', ')
+    }
+    set :chatops_deploy_starting_text, ->{
+      "### :zap: ⎡#{fetch(:application)}⎦ is deploying by ⎡*#{fetch(:local_user)}*⎦: Starting •••"
+    }
+    set :chatops_deploy_succeed_text, ->{
+      time_elapsed = Integer(fetch(:chatops_time_finished, 0).to_i - fetch(:chatops_time_started, 0).to_i)
+      "### :tada: ⎡#{fetch(:application)}⎦ was deployed by ⎡#{fetch(:local_user)}⎦: " \
+      "*successful* in **#{time_elapsed}** seconds."
+    }
+    set :chatops_deploy_failed_text, ->{
+      time_elapsed = Integer(fetch(:chatops_time_finished, 0).to_i - fetch(:chatops_time_started, 0).to_i)
+      "### :sos: ⎡#{fetch(:application)}⎦ was deployed by ⎡#{fetch(:local_user)}⎦: " \
+      "*failed* in **#{time_elapsed}** seconds."
+    }
+    set :chatops_notify_events, [:started, :finished, :failed]
+  end
+end
