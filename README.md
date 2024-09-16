@@ -10,7 +10,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'Chatopsify', require: false
+gem 'chatopsify', require: false
 ```
 
 And then execute:
@@ -19,29 +19,29 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install Chatopsify
+    $ gem install chatopsify
 
 ## Usage
 
 Require the gem in your `Capfile`:
 
-    require 'capistrano/Chatopsify'
+    require 'capistrano/chatopsify'
 
 ## Configuration
 
-### Puts `CHATOPS_API_TOKEN` into your ENV
+### Puts `CHATOPS_API_KEY` into your ENV
 
-- Export to your `bash`: `export CHATOPS_API_TOKEN=xxx`
+- Export to your `bash`: `export CHATOPS_API_KEY=xxx`
 
 - Add to `.env` if you're using `dotenv` gem
 
 
-### Puts `CHATOPS_ROOM_ID` into your ENV or custom in `config/deploy`
+### Puts `CHATOPS_CHANNEL_ID` into your ENV or custom in `config/deploy`
 
 ```ruby
 # config/deploy.rb
 ...
-set :chatops_room_id, 'xxx'
+set :chatops_channel_id, 'xxx'
 ...
 ```
 

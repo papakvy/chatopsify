@@ -5,12 +5,12 @@ namespace :chatops do
     set :chatops_time_started, Time.now
     run_locally do
       if fetch(:chatops_notify_events).include? :started
-        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:starting))
+        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
       end
     end
   end
-  before 'deploy:starting', 'chatops:notify_started'
-  # before 'rbenv:validate', 'chatops:notify_started'
+  # before 'deploy:starting', 'chatops:notify_started'
+  before 'rbenv:validate', 'chatops:notify_started'
 
   desc "Notify ChatOps Finished"
   task :notify_finished do
@@ -18,12 +18,12 @@ namespace :chatops do
     run_locally do
       if fetch(:chatops_notify_events).include? :finished
         info 'Notifying ChatOps of deploy finished'
-        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:success))
+        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:success))
       end
     end
   end
   # after 'deploy:finished', 'chatops:notify_finished'
-  # before 'deploy:failed', 'chatops:notify_finished'
+  before 'deploy:failed', 'chatops:notify_finished'
 
   desc "Notify ChatOps Finished"
   task :notify_failed do
@@ -31,12 +31,11 @@ namespace :chatops do
     run_locally do
       if fetch(:chatops_notify_events).include? :failed
         info 'Notifying ChatOps of deploy failed'
-        # Chatopsify::Co.new.call(Chatopsify::CoLib.message_body(:failed))
-        Chatopsify::Co.new.call(Chatopsify::CoLib.msg_fmt(:failed))
+        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:failed))
       end
     end
   end
-  # before 'deploy:failed', 'chatops:notify_failed'
+  after 'deploy:failed', 'chatops:notify_failed'
 end
 
 namespace :load do

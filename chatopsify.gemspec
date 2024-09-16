@@ -13,15 +13,15 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Publish deployment notifications to ChatOps via the API'
   spec.description   = 'Publish deployment notifications to ChatOps via the API'
-  spec.homepage      = 'https://github.com/rs-phunt/Chatopsify'
+  spec.homepage      = 'https://github.com/papakvy/chatopsify'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.6'
 
   # spec.metadata['allowed_push_host'] = 'TODO: Set to your gem server 'https://example.com''
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/rs-phunt/Chatopsify'
-  spec.metadata['changelog_uri'] = 'https://github.com/rs-phunt/Chatopsify/blob/master/CHANGELOG.md'
+  spec.metadata['source_code_uri'] = 'https://github.com/papakvy/chatopsify'
+  spec.metadata['changelog_uri'] = 'https://github.com/papakvy/chatopsify/blob/master/CHANGELOG.md'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.bindir        = 'exe'
