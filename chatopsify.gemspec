@@ -29,9 +29,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   # Uncomment to register a new dependency of your gem
-  # spec.add_dependency 'chatops', '~> 0.1'
 
   spec.add_dependency 'capistrano', '~> 3.2', '>= 3.2.0'
+  spec.add_dependency 'tzinfo', '~> 1.1'
   spec.add_development_dependency 'bundler', '~> 2'
   spec.add_development_dependency 'rake', '~> 1'
 

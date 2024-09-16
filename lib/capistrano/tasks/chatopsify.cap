@@ -9,8 +9,8 @@ namespace :chatops do
       end
     end
   end
-  # before 'deploy:starting', 'chatops:notify_started'
-  before 'rbenv:validate', 'chatops:notify_started'
+  before 'deploy:starting', 'chatops:notify_started'
+  # before 'rbenv:validate', 'chatops:notify_started'
 
   desc "Notify ChatOps Finished"
   task :notify_finished do
@@ -22,8 +22,8 @@ namespace :chatops do
       end
     end
   end
-  # after 'deploy:finished', 'chatops:notify_finished'
-  before 'deploy:failed', 'chatops:notify_finished'
+  after 'deploy:finished', 'chatops:notify_finished'
+  # before 'deploy:failed', 'chatops:notify_finished'
 
   desc "Notify ChatOps Finished"
   task :notify_failed do
