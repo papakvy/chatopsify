@@ -1,7 +1,6 @@
 namespace :chatops do
   desc "Notify ChatOps Started"
   task :notify_started do
-    # return
     set :chatops_time_started, Time.now
     run_locally do
       if fetch(:chatops_notify_events).include? :started
@@ -51,7 +50,7 @@ namespace :load do
       servers.map{ |e| ["#{e.hostname} (#{e.properties.fetch(:my_property)&.upcase!})"]}.join(', ')
     }
     set :chatops_deploy_starting_text, ->{
-      "### :zap: ⎡#{fetch(:application)}⎦ is deploying by ⎡*#{fetch(:local_user)}*⎦: Starting •••"
+      "### :zap: ⎡#{fetch(:application)}⎦ is being deployed by ⎡*#{fetch(:local_user)}*⎦: Starting •••"
     }
     set :chatops_deploy_succeed_text, ->{
       time_elapsed = Integer(fetch(:chatops_time_finished, 0).to_i - fetch(:chatops_time_started, 0).to_i)
@@ -61,7 +60,7 @@ namespace :load do
     set :chatops_deploy_failed_text, ->{
       time_elapsed = Integer(fetch(:chatops_time_finished, 0).to_i - fetch(:chatops_time_started, 0).to_i)
       "### :sos: ⎡#{fetch(:application)}⎦ was deployed by ⎡#{fetch(:local_user)}⎦: " \
-      "*failed* in **#{time_elapsed}** seconds."
+      "*failed* within **#{time_elapsed}** seconds."
     }
     set :chatops_notify_events, [:started, :finished, :failed]
   end

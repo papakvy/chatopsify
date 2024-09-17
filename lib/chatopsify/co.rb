@@ -2,10 +2,8 @@
 
 require 'json'
 require 'net/http'
-require 'tzinfo'
 
 module Chatopsify
-  # ChatOps service
   class Co
     def initialize(api_key = nil)
       @api_key    = api_key || load_api_key
@@ -105,7 +103,7 @@ module Chatopsify
 | Server | #{fetch(:ip_address) }|
 | Branch | #{fetch(:branch)} |
 | Revision | #{fetch(:current_revision) || '<empty>'} |
-| Timestamp | #{TZInfo::Timezone.get('Asia/Ho_Chi_Minh')&.now || Time.now} |
+| Timestamp | #{Time.now.getlocal("+07:00") || Time.now} |
 """
       end
     end
