@@ -23,8 +23,8 @@ module Chatopsify
       puts e.message
     end
 
-    def call_get(id = nil)
-      send_get_request(id)
+    def call_delete(id = nil)
+      send_delete_request(id)
     rescue StandardError => e
       puts e.message
     end
@@ -65,11 +65,10 @@ module Chatopsify
       puts "Response: #{res.code} #{res.body}"
     end
 
-    def send_get_request(id = nil)
+    def send_delete_request(id = nil)
       uri = URI(@uri)
       uri.path += "/#{id}" if id
 
-      # req = Net::HTTP::Get.new(co_uri)
       req = Net::HTTP::Delete.new(uri)
       req['authorization'] = "Bearer #{o_api_key}"
       res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
@@ -99,7 +98,7 @@ module Chatopsify
 """#{text(status)}
 | TITLE | CONTENTS |
 |----------:|:-------------|
-| Stage | #{fetch(:stage).upcase!} |
+| Stage | #{fetch(:stage)&.upcase!} |
 | Server | #{fetch(:ip_address) }|
 | Branch | #{fetch(:branch)} |
 | Revision | #{fetch(:current_revision) || '<empty>'} |
@@ -135,8 +134,8 @@ module Chatopsify
 
         encrypted = cipher.update(@str) + cipher.final
         (salt + encrypted).unpack1('H*')
-      rescue => e
-        false
+      rescue StandardError => e
+        puts e.message
       end
     end
 
@@ -157,8 +156,8 @@ module Chatopsify
         cipher.iv = iv
 
         cipher.update(encrypted_data) + cipher.final
-      rescue => e
-        false
+      rescue StandardError => e
+        puts e.message
       end
     end
 

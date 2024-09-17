@@ -4,7 +4,12 @@ namespace :chatops do
     set :chatops_time_started, Time.now
     run_locally do
       if fetch(:chatops_notify_events).include? :started
-        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
+        info 'Notifying ChatOps of deploy started'
+        begin
+          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
+        rescue StandardError => e
+          info "ERROR notify_started: #{e}"
+        end
       end
     end
   end
@@ -17,7 +22,11 @@ namespace :chatops do
     run_locally do
       if fetch(:chatops_notify_events).include? :finished
         info 'Notifying ChatOps of deploy finished'
-        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:success))
+        begin
+          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:success))
+        rescue StandardError => e
+          info "ERROR notify_finished: #{e}"
+        end
       end
     end
   end
@@ -30,7 +39,11 @@ namespace :chatops do
     run_locally do
       if fetch(:chatops_notify_events).include? :failed
         info 'Notifying ChatOps of deploy failed'
-        Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:failed))
+        begin
+          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:failed))
+        rescue StandardError => e
+          info "ERROR notify_failed: #{e}"
+        end
       end
     end
   end
