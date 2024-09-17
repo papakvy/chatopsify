@@ -1,10 +1,10 @@
 # Chatopsify
 
-![Gem](https://img.shields.io/gem/v/chatopsify?color=%25234cc61f&label=Gem%20version&logo=ruby&logoColor=red)
-![Gem](https://img.shields.io/gem/dt/chatopsify?color=%2330c754&label=Downloads&logo=rubygems&logoColor=red)
-[![Rubocop Lint](https://github.com/papakvy/chatopsify/actions/workflows/run_rubocop.yml/badge.svg?branch=main)](https://github.com/papakvy/chatopsify/actions/workflows/run_rubocop.yml)
-<!-- ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Tests%20%F0%9F%A7%AA?label=Tests&logo=github)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Rubocop%20Lint?label=Rubocop&logo=github) -->
+![Gem](https://img.shields.io/gem/v/chatopsify?color=%25234cc61f&label=Gem%20version&logo=ruby&logoColor=red&link=https%3A%2F%2Frubygems.org%2Fgems%2Fchatopsify)
+![Gem](https://img.shields.io/gem/dt/chatopsify?color=%2330c754&label=Downloads&logo=rubygems&logoColor=red&link=https%3A%2F%2Frubygems.org%2Fgems%2Fchatopsify)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/papakvy/chatopsify/run_rubocop.yml?branch=main&logo=rubocop&logoColor=red&label=Rubocop%20Lint)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/papakvy/chatopsify/run_tests.yml?branch=main&logo=rubocop&logoColor=red&label=Tests%20%F0%9F%A7%AA)
+<!-- ![GitHub Repo stars](https://img.shields.io/github/stars/papakvy/chatopsify?logoColor=red) -->
 
 ## Installation
 
