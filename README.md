@@ -1,9 +1,9 @@
 # Chatopsify
 
-![Gem](https://img.shields.io/gem/v/Chatopsify?color=%234cc61f&label=Gem%20version&logo=ruby&logoColor=red)
-![Gem](https://img.shields.io/gem/dt/Chatopsify?color=%2330c754&label=Downloads&logo=rubygems&logoColor=red)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Tests%20%F0%9F%A7%AA?label=Tests&logo=github)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Rubocop%20Lint?label=Rubocop&logo=github)
+![Gem](https://img.shields.io/gem/v/chatopsify?color=%25234cc61f&label=Gem%20version&logo=ruby&logoColor=red)
+![Gem](https://img.shields.io/gem/dt/chatopsify?color=%2330c754&label=Downloads&logo=rubygems&logoColor=red)
+<!-- ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Tests%20%F0%9F%A7%AA?label=Tests&logo=github)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rs-phunt/Chatopsify/Rubocop%20Lint?label=Rubocop&logo=github) -->
 
 ## Installation
 
@@ -29,19 +29,22 @@ Require the gem in your `Capfile`:
 
 ## Configuration
 
-### Puts `CHATOPS_API_KEY` into your ENV
+### Using ENV (or `.env`)
 
-- Export to your `bash`: `export CHATOPS_API_KEY=xxx`
+```bash
+export CHATOPS_URI='your_chatops_uri'
+export CHATOPS_API_KEY='your_chatops_api_key'
+export CHATOPS_CHANNEL_ID='your_channel_id'
+```
 
-- Add to `.env` if you're using `dotenv` gem
-
-
-### Puts `CHATOPS_CHANNEL_ID` into your ENV or custom in `config/deploy`
+### Using `config/deploy`
 
 ```ruby
 # config/deploy.rb
 ...
-set :chatops_channel_id, 'xxx'
+set :chatops_uri, 'your_chatops_uri'
+set :chatops_api_key, 'your_chatops_api_key'
+set :chatops_channel_id, 'your_channel_id'
 ...
 ```
 
