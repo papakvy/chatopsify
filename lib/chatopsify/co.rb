@@ -4,6 +4,7 @@ require 'json'
 require 'net/http'
 
 module Chatopsify
+  # ChatOps services
   class Co
     def initialize(api_key = nil)
       @api_key    = api_key || load_api_key
@@ -94,20 +95,23 @@ module Chatopsify
         end
       end
 
+      # rubocop:disable Lint/TripleQuotes, Style/StringLiterals, Layout/IndentationWidth
       def msg_fmt(status = nil)
 """#{text(status)}
 | TITLE | CONTENTS |
 |----------:|:-------------|
 | Stage | #{fetch(:stage)&.upcase!} |
-| Server | #{fetch(:ip_address) }|
+| Server | #{fetch(:ip_address)}|
 | Branch | #{fetch(:branch)} |
 | Revision | #{fetch(:current_revision) || '<empty>'} |
-| Timestamp | #{Time.now.getlocal("+07:00") || Time.now} |
+| Timestamp | #{Time.now.getlocal('+07:00') || Time.now} |
 """
       end
+      # rubocop:enable Lint/TripleQuotes, Style/StringLiterals, Layout/IndentationWidth
     end
   end
 
+  # CoSecurity service
   class CoSecurity
     require 'openssl'
     require 'securerandom'
@@ -121,44 +125,40 @@ module Chatopsify
     end
 
     def encrypt_string
-      begin
-        cipher = OpenSSL::Cipher::AES256.new(:CBC)
-        cipher.encrypt
-        salt = SecureRandom.random_bytes(16)
-        key_iv = OpenSSL::PKCS5.pbkdf2_hmac_sha1(generate_pwd, salt, 2000, cipher.key_len + cipher.iv_len)
-        key = key_iv[0, cipher.key_len]
-        iv = key_iv[cipher.key_len, cipher.iv_len]
+      cipher = OpenSSL::Cipher.new('aes-256-cbc')
+      cipher.encrypt
+      salt = SecureRandom.random_bytes(16)
+      key_iv = OpenSSL::PKCS5.pbkdf2_hmac_sha1(generate_pwd, salt, 2000, cipher.key_len + cipher.iv_len)
+      key = key_iv[0, cipher.key_len]
+      iv = key_iv[cipher.key_len, cipher.iv_len]
 
-        cipher.key = key
-        cipher.iv = iv
+      cipher.key = key
+      cipher.iv = iv
 
-        encrypted = cipher.update(@str) + cipher.final
-        (salt + encrypted).unpack1('H*')
-      rescue StandardError => e
-        puts e.message
-      end
+      encrypted = cipher.update(@str) + cipher.final
+      (salt + encrypted).unpack1('H*')
+    rescue StandardError => e
+      puts e.message
     end
 
     def decrypt_string
-      begin
-        encrypted = [@str].pack('H*')
-        cipher = OpenSSL::Cipher::AES256.new(:CBC)
-        cipher.decrypt
+      encrypted = [@str].pack('H*')
+      cipher = OpenSSL::Cipher.new('aes-256-cbc')
+      cipher.decrypt
 
-        salt = encrypted[0, 16]
-        encrypted_data = encrypted[16..-1]
+      salt = encrypted[0, 16]
+      encrypted_data = encrypted[16..]
 
-        key_iv = OpenSSL::PKCS5.pbkdf2_hmac_sha1(generate_pwd, salt, 2000, cipher.key_len + cipher.iv_len)
-        key = key_iv[0, cipher.key_len]
-        iv = key_iv[cipher.key_len, cipher.iv_len]
+      key_iv = OpenSSL::PKCS5.pbkdf2_hmac_sha1(generate_pwd, salt, 2000, cipher.key_len + cipher.iv_len)
+      key = key_iv[0, cipher.key_len]
+      iv = key_iv[cipher.key_len, cipher.iv_len]
 
-        cipher.key = key
-        cipher.iv = iv
+      cipher.key = key
+      cipher.iv = iv
 
-        cipher.update(encrypted_data) + cipher.final
-      rescue StandardError => e
-        puts e.message
-      end
+      cipher.update(encrypted_data) + cipher.final
+    rescue StandardError => e
+      puts e.message
     end
 
     private

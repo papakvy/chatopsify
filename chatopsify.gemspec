@@ -31,8 +31,6 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
 
   spec.add_dependency 'capistrano', '~> 3.2', '>= 3.2.0'
-  spec.add_development_dependency 'bundler', '~> 2'
-  spec.add_development_dependency 'rake', '~> 1'
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html

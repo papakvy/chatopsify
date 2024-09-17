@@ -6,8 +6,14 @@ Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: single_quotes
 
+Metrics/AbcSize:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
+Metrics/MethodLength:
+  Max: 120
+
 
 AllCops:
   NewCops: enable
