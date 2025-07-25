@@ -49,6 +49,13 @@ set :chatops_channel_id, 'your_channel_id'
 ...
 ```
 
+Config deploy success/failure notifications are posted as thread replies to the initial deploy start message.
+
+```ruby
+# config/deploy.rb
+set :chatops_use_thread_replies, true
+```
+
 ### Copyright
 
 ©rs-phunt

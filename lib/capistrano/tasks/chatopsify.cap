@@ -6,7 +6,8 @@ namespace :chatops do
       if fetch(:chatops_notify_events).include? :started
         info 'Notifying ChatOps of deploy started'
         begin
-          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
+          response = Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
+          set :chatops_root_id, response.dig('id') if fetch(:chatops_use_thread_replies)
         rescue StandardError => e
           info "ERROR notify_started: #{e}"
         end
@@ -23,7 +24,8 @@ namespace :chatops do
       if fetch(:chatops_notify_events).include? :finished
         info 'Notifying ChatOps of deploy finished'
         begin
-          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:success))
+          root_id = fetch(:chatops_use_thread_replies) ? fetch(:chatops_root_id) : nil
+          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:success), root_id)
         rescue StandardError => e
           info "ERROR notify_finished: #{e}"
         end
@@ -33,14 +35,15 @@ namespace :chatops do
   after 'deploy:finished', 'chatops:notify_finished'
   # before 'deploy:failed', 'chatops:notify_finished'
 
-  desc "Notify ChatOps Finished"
+  desc "Notify ChatOps Failed"
   task :notify_failed do
     set :chatops_time_finished, Time.now
     run_locally do
       if fetch(:chatops_notify_events).include? :failed
         info 'Notifying ChatOps of deploy failed'
         begin
-          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:failed))
+          root_id = fetch(:chatops_use_thread_replies) ? fetch(:chatops_root_id) : nil
+          Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:failed), root_id)
         rescue StandardError => e
           info "ERROR notify_failed: #{e}"
         end
@@ -55,6 +58,7 @@ namespace :load do
     set :chatops_co_uri, nil
     set :chatops_api_key, nil
     set :chatops_channel_id, nil
+    set :chatops_use_thread_replies, false
 
     set :local_user, ->{ ENV["USER"] || ENV["LOGNAME"] || ENV["USERNAME"] || `hostname`.strip + '•' + `whoami`.strip || "default_user" }
     set :ip_address, ->{

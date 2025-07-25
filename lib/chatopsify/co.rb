@@ -16,10 +16,10 @@ module Chatopsify
       new(*args, &block)
     end
 
-    def process(body = nil)
+    def process(body = nil, root_id = nil)
       body ||= Chatopsify::CoLib.msg_fmt
 
-      send_request(body)
+      send_request(body, root_id)
     rescue StandardError => e
       puts e.message
     end
@@ -51,19 +51,20 @@ module Chatopsify
       Chatopsify::CoSecurity.call(@api_key).decrypt_string
     end
 
-    def send_request(msg)
+    def send_request(msg, root_id)
       # puts "msg: #{msg}"
       uri = URI(@uri)
 
       req = Net::HTTP::Post.new(uri)
       req['authorization'] = "Bearer #{o_api_key}"
       req.content_type = 'application/json'
-      req.body = { channel_id: @channel_id, message: msg }.to_json
+      req.body = { channel_id: @channel_id, message: msg, root_id: root_id }.to_json
       res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
         http.request(req)
       end
 
       puts "Response: #{res.code} #{res.body}"
+      JSON.parse(res.body)
     end
 
     def send_delete_request(id = nil)
