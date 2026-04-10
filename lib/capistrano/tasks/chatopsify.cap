@@ -7,7 +7,7 @@ namespace :chatops do
         info 'Notifying ChatOps of deploy started'
         begin
           response = Chatopsify::Co.call.process(Chatopsify::CoLib.msg_fmt(:starting))
-          set :chatops_root_id, response.dig('id') if fetch(:chatops_use_thread_replies)
+          set :chatops_root_id, response&.dig('id') if fetch(:chatops_use_thread_replies)
         rescue StandardError => e
           info "ERROR notify_started: #{e}"
         end
